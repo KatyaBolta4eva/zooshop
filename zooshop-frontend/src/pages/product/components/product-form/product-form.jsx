@@ -2,7 +2,7 @@ import { useLayoutEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Icon, Input, SpecialPanel } from '../../../../components';
-import { saveProductAsync, loadProductAsync } from '../../../../actions';
+import { saveProductAsync, showToast } from '../../../../actions';
 import styled from 'styled-components';
 
 const ProductFormContainer = ({
@@ -16,6 +16,7 @@ const ProductFormContainer = ({
 		dietType,
 		price,
 		weightKg,
+		quantity,
 		description,
 	},
 }) => {
@@ -26,11 +27,11 @@ const ProductFormContainer = ({
 	const [dietTypeValue, setDietTypeValue] = useState(dietType);
 	const [priceValue, setPriceValue] = useState(price);
 	const [weightKgValue, setWeightKgValue] = useState(weightKg);
+	const [quantityValue, setQuantityValue] = useState(quantity);
 	const [descriptionValue, setDescriptionValue] = useState(description);
 
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-
 
 	useLayoutEffect(() => {
 		setImageUrlValue(imageUrl);
@@ -40,8 +41,19 @@ const ProductFormContainer = ({
 		setDietTypeValue(dietType);
 		setPriceValue(price);
 		setWeightKgValue(weightKg);
+		setQuantityValue(quantity);
 		setDescriptionValue(description);
-	}, [imageUrl, name, category, feedType, dietType, price, weightKg, description]);
+	}, [
+		imageUrl,
+		name,
+		category,
+		feedType,
+		dietType,
+		price,
+		weightKg,
+		quantity,
+		description,
+	]);
 
 	const onSave = () => {
 		const cleanedDescription = descriptionValue.trim();
@@ -53,14 +65,23 @@ const ProductFormContainer = ({
 				category: categoryValue,
 				feedType: feedTypeValue,
 				dietType: dietTypeValue,
-				price: priceValue,
+				price: Number(priceValue),
 				weightKg: weightKgValue,
+				quantity: Number(quantityValue),
 				description: cleanedDescription,
 			}),
-		).then(({ id }) => {
-			dispatch(loadProductAsync(id)).then(() => {
-				navigate(`/product/${id}`);
-			});
+		).then(({ error, data }) => {
+			if (error) {
+				dispatch(showToast(result.error, 'error'));
+				return;
+			}
+
+			if (data?.id) {
+				dispatch(showToast('Товар успешно сохранён!', 'success'));
+				navigate(`/product/${data.id}`);
+			} else {
+				dispatch(showToast('Ошибка при сохранении товара', 'error'));
+			}
 		});
 	};
 
@@ -71,14 +92,13 @@ const ProductFormContainer = ({
 	const onDietTypeChange = ({ target }) => setDietTypeValue(target.value);
 	const onPriceChange = ({ target }) => setPriceValue(target.value);
 	const onWeightKgChange = ({ target }) => setWeightKgValue(target.value);
+	const onQuantityChange = ({ target }) => setQuantityValue(target.value);
 	const onDescriptionChange = ({ target }) => setDescriptionValue(target.value);
 
 	return (
 		<div className={className}>
 			<div className="save-panel">
 				<SpecialPanel
-					id={id}
-					price={price}
 					margin="20px 0"
 					editButton={
 						<Icon
@@ -103,17 +123,17 @@ const ProductFormContainer = ({
 			/>
 			<Input
 				value={categoryValue}
-				placeholder="Категория товара (для кошек/собак)..."
+				placeholder="Категория товара (cat/dog)..."
 				onChange={onCategoryChange}
 			/>
 			<Input
 				value={feedTypeValue}
-				placeholder="Тип корма..."
+				placeholder="Тип корма (dry/wet)..."
 				onChange={onFeedTypeChange}
 			/>
 			<Input
 				value={dietTypeValue}
-				placeholder="Тип диеты..."
+				placeholder="Тип диеты (regular/vet)..."
 				onChange={onDietTypeChange}
 			/>
 			<Input
@@ -125,6 +145,11 @@ const ProductFormContainer = ({
 				value={weightKgValue}
 				placeholder="Вес товара..."
 				onChange={onWeightKgChange}
+			/>
+			<Input
+				value={quantityValue}
+				placeholder="Количество на складе..."
+				onChange={onQuantityChange}
 			/>
 
 			<textarea

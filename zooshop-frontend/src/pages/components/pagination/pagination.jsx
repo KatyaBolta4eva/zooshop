@@ -1,7 +1,12 @@
+import { useEffect } from 'react';
 import { Button } from '../../../components';
 import styled from 'styled-components';
 
 const PaginationContainer = ({ className, page, lastPage, setPage }) => {
+	useEffect(() => {
+		window.scrollTo(0, 0);
+	}, [page]);
+
 	return (
 		<div className={className}>
 			<Button disabled={page === 1} onClick={() => setPage(1)}>

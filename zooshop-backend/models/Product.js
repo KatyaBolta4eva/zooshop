@@ -28,12 +28,18 @@ const ProductSchema = mongoose.Schema(
       required: true,
     },
     price: {
-      type: String,
+      type: Number,
       required: true,
     },
     weight_kg: {
       type: String,
       required: true,
+    },
+    quantity: {
+      type: Number,
+      required: true,
+      default: 0,
+      min: 0,
     },
     description: {
       type: String,

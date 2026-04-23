@@ -9,6 +9,7 @@ const initialProductState = {
 	dietType: '',
 	price: '',
 	weightKg: '',
+	quantity: '',
 	description: '',
 };
 

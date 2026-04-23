@@ -2,12 +2,13 @@ import { request } from '../utils';
 import { setCartItems } from './set-cart-items';
 
 export const addToCartAsync = (productId) => (dispatch) =>
-	request('/api/cart', 'POST', { productId, quantity: 1 }).then(
-		({ data }) => {
-			if (data) {
-				dispatch(setCartItems(data));
-			}
+	request('/api/cart', 'POST', { productId, quantity: 1 }).then(({ error, data }) => {
+		if (error) {
+			return { error };
+		}
+		if (data) {
+			dispatch(setCartItems(data));
+		}
 
-			return { error: null };
-		},
-	);
+		return { error: null };
+	});

@@ -20,6 +20,8 @@ const {
   clearCart,
 } = require("./controllers/cart");
 
+const { createOrder } = require("./controllers/order");
+
 const mapUser = require("./helpers/mapUser");
 const mapProduct = require("./helpers/mapProduct");
 const mapCart = require("./helpers/mapCart");
@@ -66,61 +68,96 @@ app.post("/logout", (req, res) => {
 });
 
 app.get("/products", async (req, res) => {
-  const { products, lastPage } = await getProducts(
-    req.query.search,
-    req.query.limit,
-    req.query.page,
-    req.query.category,
-    req.query.dietType,
-    req.query.sort
-  );
+  try {
+    const { products, lastPage } = await getProducts(
+      req.query.search,
+      req.query.limit,
+      req.query.page,
+      req.query.category,
+      req.query.dietType,
+      req.query.sort
+    );
 
-  res.send({ data: { lastPage, products: products.map(mapProduct) } });
+    res.send({ data: { lastPage, products: products.map(mapProduct) } });
+  } catch (e) {
+    res.send({ error: e.message || "Unknown error" });
+  }
 });
 
 app.get("/products/:id", async (req, res) => {
-  const product = await getProduct(req.params.id);
+  try {
+    const product = await getProduct(req.params.id);
 
-  res.send({ data: mapProduct(product) });
+    if (!product) {
+      res.send({ error: "Product not found" });
+      return;
+    }
+
+    res.send({ data: mapProduct(product) });
+  } catch (e) {
+    res.send({ error: e.message || "Unknown error" });
+  }
 });
 
 app.use(authenticated);
 
 app.post("/products", hasRole([ROLES.ADMIN]), async (req, res) => {
-  const newProduct = await addProduct({
-    image_url: req.body.imageUrl,
-    weight_kg: req.body.weightKg,
-    feed_type: req.body.feedType,
-    diet_type: req.body.dietType,
-    name: req.body.name,
-    category: req.body.category,
-    price: req.body.price,
-    description: req.body.description,
-  });
+  try {
+    const newProduct = await addProduct({
+      image_url: req.body.imageUrl,
+      weight_kg: req.body.weightKg,
+      feed_type: req.body.feedType,
+      diet_type: req.body.dietType,
+      name: req.body.name,
+      category: req.body.category,
+      price: req.body.price,
+      description: req.body.description,
+    });
 
-  res.send({ data: mapProduct(newProduct) });
+    res.send({ data: mapProduct(newProduct) });
+  } catch (e) {
+    res.send({ error: e.message || "Unknown error" });
+  }
 });
 
 app.patch("/products/:id", hasRole([ROLES.ADMIN]), async (req, res) => {
-  // todo
-  const updatedProduct = await editProduct(req.params.id, {
-    image_url: req.body.imageUrl,
-    weight_kg: req.body.weightKg,
-    feed_type: req.body.feedType,
-    diet_type: req.body.dietType,
-    name: req.body.name,
-    category: req.body.category,
-    price: req.body.price,
-    description: req.body.description,
-  });
+  try {
+    const updatedProduct = await editProduct(req.params.id, {
+      image_url: req.body.imageUrl,
+      weight_kg: req.body.weightKg,
+      feed_type: req.body.feedType,
+      diet_type: req.body.dietType,
+      name: req.body.name,
+      category: req.body.category,
+      price: req.body.price,
+      quantity: req.body.quantity,
+      description: req.body.description,
+    });
 
-  res.send({ data: mapProduct(updatedProduct) });
+    if (!updatedProduct) {
+      res.send({ error: "Product not found" });
+      return;
+    }
+
+    res.send({ data: mapProduct(updatedProduct) });
+  } catch (e) {
+    res.send({ error: e.message || "Unknown error" });
+  }
 });
 
 app.delete("/products/:id", hasRole([ROLES.ADMIN]), async (req, res) => {
-  await deleteProduct(req.params.id);
+  try {
+    await deleteProduct(req.params.id);
 
-  res.send({ error: null });
+    if (result.deletedCount === 0) {
+      res.send({ error: "Product not found" });
+      return;
+    }
+
+    res.send({ error: null });
+  } catch (e) {
+    res.send({ error: e.message || "Unknown error" });
+  }
 });
 
 app.get("/cart", authenticated, async (req, res) => {
@@ -153,7 +190,7 @@ app.patch("/cart", authenticated, async (req, res) => {
       req.body.quantity
     );
     if (!cart) {
-      res.send({ error: "Cart not found" });
+      res.send({ error: "Товар не найден в корзине!" });
       return;
     }
     res.send({ data: mapCart(cart) });
@@ -176,6 +213,15 @@ app.delete("/cart/clear", authenticated, async (req, res) => {
   try {
     await clearCart(req.user._id);
     res.send({ data: [] });
+  } catch (e) {
+    res.send({ error: e.message || "Unknown error" });
+  }
+});
+
+app.post("/orders", authenticated, async (req, res) => {
+  try {
+    await createOrder(req.user._id);
+    res.send({ error: null });
   } catch (e) {
     res.send({ error: e.message || "Unknown error" });
   }

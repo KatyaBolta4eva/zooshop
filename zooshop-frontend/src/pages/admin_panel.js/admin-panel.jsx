@@ -14,15 +14,9 @@ import {
 	PrivateContent,
 	Loader,
 } from '../../components';
-import {Pagination, Search} from '../components';
-import {debounce} from '../utils'
-
-// import {Pagination} from '../main/components/pagination/pagination'
-// import {Search} from '../main/components/search/search'
-// import {debounce} from '../main/utils/debounce'
-
+import { Pagination, Search } from '../components';
+import { debounce } from '../utils';
 import styled from 'styled-components';
-
 
 const AdminPanelContainer = ({ className }) => {
 	const dispatch = useDispatch();
@@ -52,7 +46,7 @@ const AdminPanelContainer = ({ className }) => {
 	};
 
 	const onCreate = () => {
-		navigate('/product');ы
+		navigate('/product');
 	};
 
 	const onEdit = (id) => {
@@ -99,6 +93,7 @@ const AdminPanelContainer = ({ className }) => {
 									<P fontWeight="bold" color="#5D4037">
 										{product.price} ₽
 									</P>
+									<P>Количество на складе: {product.quantity} шт.</P>
 								</div>
 								<SpecialPanel
 									id={product.id}

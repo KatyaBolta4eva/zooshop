@@ -70,7 +70,8 @@ const RegistrationContainer = ({ className }) => {
 
 	const formError =
 		errors?.login?.message || errors?.password?.message || errors?.passcheck?.message;
-	const errorMessage = formError || serverError;
+
+		const errorMessage = formError || serverError;
 
 	if (roleId !== ROLE.GUEST) {
 		return <Navigate to="/" />;

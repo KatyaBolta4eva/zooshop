@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const User = require("../models/User");
 const { generate } = require("../helpers/token");
-const ROLES = require('../constants/roles')
+const ROLES = require("../constants/roles");
 
 // register
 
@@ -14,7 +14,7 @@ async function register(login, password) {
   const user = await User.create({ login, password: passwordHash });
   const token = generate({ id: user.id });
 
-  return {user, token};
+  return { user, token };
 }
 
 // login
@@ -38,27 +38,27 @@ async function login(login, password) {
 }
 
 function getUsers() {
-  return User.find()
+  return User.find();
 }
 
-function getRoles(){
+function getRoles() {
   return [
-    {id: ROLES.ADMIN, name: 'Admin'},
-    {id: ROLES.MODERATOR, name: 'Moderator'},
-    {id: ROLES.USER, name: 'User'}
-  ]
+    { id: ROLES.ADMIN, name: "Admin" },
+    { id: ROLES.MODERATOR, name: "Moderator" },
+    { id: ROLES.USER, name: "User" },
+  ];
 }
 
 // delete
 
 function deleteUser(id) {
-  return User.deleteOne({_id: id})
+  return User.deleteOne({ _id: id });
 }
 
 // edit (roles)
 
 function updateUser(id, userData) {
-  return User.findByIdAndUpdate(id, userData, {returnDocument: 'after'})
+  return User.findByIdAndUpdate(id, userData, { returnDocument: "after" });
 }
 
 module.exports = {
@@ -67,5 +67,5 @@ module.exports = {
   getUsers,
   getRoles,
   deleteUser,
-  updateUser
+  updateUser,
 };

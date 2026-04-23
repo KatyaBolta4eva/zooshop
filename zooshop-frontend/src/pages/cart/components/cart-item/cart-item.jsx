@@ -1,32 +1,38 @@
 import { Icon, Button } from '../../../../components';
 import styled from 'styled-components';
 
-const CartItemContainer = ({ className, item, onUpdateQuantity, onRemove, disabled }) => {
+const CartItemContainer = ({
+	className,
+	item: { name, imageUrl, price, quantity },
+	onUpdateQuantity,
+	onRemove,
+	disabled,
+}) => {
 	const increaseQuantity = () => {
-		onUpdateQuantity(item.quantity + 1);
+		onUpdateQuantity(quantity + 1);
 	};
 
 	const decreaseQuantity = () => {
-		onUpdateQuantity(item.quantity - 1);
+		onUpdateQuantity(quantity - 1);
 	};
 
 	return (
 		<div className={className}>
-			{item.imageUrl && (
-				<img src={item.imageUrl} alt={item.name} className="item-image" />
+			{imageUrl && (
+				<img src={imageUrl} alt={name} className="item-image" />
 			)}
 
 			<div className="item-info">
-				<div className="item-name">{item.name}</div>
-				<div className="item-details">Цена: {item.price} руб.</div>
+				<div className="item-name">{name}</div>
+				<div className="item-details">Цена: {price} руб.</div>
 			</div>
 			<div className="quantity-controls">
 				<Button onClick={decreaseQuantity} disabled={disabled}>-</Button>
-				<span>{item.quantity}</span>
+				<span>{quantity}</span>
 				<Button onClick={increaseQuantity} disabled={disabled}>+</Button>
 			</div>
 			<div className="item-total">
-				Итого: {(item.price * item.quantity).toFixed(2)} руб.
+				Итого: {(price * quantity).toFixed(2)} руб.
 			</div>
 			<Icon
 				id="fa-trash-o"

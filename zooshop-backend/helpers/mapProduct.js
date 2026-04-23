@@ -8,6 +8,7 @@ module.exports = function (product) {
     dietType: product.diet_type,
     price: product.price,
     weightKg: product.weight_kg,
+    quantity: product.quantity,
     description: product.description,
     content: product.content,
   };

@@ -2,11 +2,13 @@ import { request } from '../utils';
 import { setProductData } from './set-product-data';
 
 export const loadProductAsync = (productId) => (dispatch) =>
-	request(`/api/products/${productId}`).then((productData) => {
-		if (productData.data) {
-			dispatch(setProductData(productData.data));
+	request(`/api/products/${productId}`).then(({ error, data }) => {
+		if (error) {
+			return { error };
 		}
-		return productData;
-	});
 
-	
+		if (data) {
+			dispatch(setProductData(data));
+		}
+		return { error: null };
+	});

@@ -10,6 +10,8 @@ import {
 	removeFromCartAsync,
 	clearCartAsync,
 	updateCartItemQuantityAsync,
+	checkoutAsync,
+	showToast,
 	openModal,
 	CLOSE_MODAL,
 } from '../../actions';
@@ -30,37 +32,46 @@ const CartContainer = ({ className }) => {
 		if (userId) {
 			setIsLoading(true);
 			dispatch(loadCartAsync())
-				.catch((error) => setError(error))
+				.then(({error}) => {
+					if (error) {
+						setError(error);
+					}
+				})
 				.finally(() => {
 					setIsLoading(false);
 				});
 		} else {
-			navigate('/register')
+			navigate('/register');
 		}
 	}, [dispatch, userId]);
 
 	const handleRemoveFromCart = (productId) => {
 		setIsOperating(true);
 		dispatch(removeFromCartAsync(productId))
-			.catch((error) => setError(error))
+			.then(({error}) => {
+				if (error) {
+					dispatch(showToast(error, 'error'));
+				}
+			})
 			.finally(() => setIsOperating(false));
 	};
 
 	const handleUpdateQuantity = (productId, newQuantity) => {
 		setIsOperating(true);
-		const action = newQuantity <= 0
-			? removeFromCartAsync(productId)
-			: updateCartItemQuantityAsync(
-					productId,
-					newQuantity,
-				);
+		const action =
+			newQuantity <= 0
+				? removeFromCartAsync(productId)
+				: updateCartItemQuantityAsync(productId, newQuantity);
 
 		dispatch(action)
-			.catch((error) => setError(error))
+			.then(({error}) => {
+				if (error) {
+					dispatch(showToast(error, 'error'));
+				}
+			})
 			.finally(() => setIsOperating(false));
 	};
 
-	
 	const handleClearCart = () => {
 		dispatch(
 			openModal({
@@ -68,7 +79,11 @@ const CartContainer = ({ className }) => {
 				onConfirm: () => {
 					setIsOperating(true);
 					dispatch(clearCartAsync())
-						.catch((error) => setError(error))
+						.then(({error}) => {
+							if (error) {
+								dispatch(showToast(error, 'error'));
+							}
+						})
 						.finally(() => {
 							setIsOperating(false);
 							dispatch(CLOSE_MODAL);
@@ -80,7 +95,16 @@ const CartContainer = ({ className }) => {
 	};
 
 	const handleCheckout = () => {
-		navigate('/order-confirmation');
+		setIsOperating(true);
+		dispatch(checkoutAsync())
+			.then(({error}) => {
+				if (error) {
+					dispatch(showToast(error, 'error'));
+					return;
+				}
+				navigate('/order-confirmation');
+			})
+			.finally(() => setIsOperating(false));
 	};
 
 	const totalPrice = cartItems.reduce(

@@ -1,7 +1,5 @@
 const Product = require("../models/Product");
 
-// get list with search, filters and pagination
-
 async function getProducts(
   search = "",
   limit = 10,
@@ -44,38 +42,19 @@ async function getProducts(
   };
 }
 
-// get item
-
-function getProduct(id) {
+async function getProduct(id) {
   return Product.findById(id);
-
 }
-
-function getPost(id) {
-    return Post.findById(id).populate({
-      path: "comments",
-      populate: "author",
-    });
-  }
-
-
-
-
-// add product
 
 async function addProduct(product) {
   return Product.create(product);
 }
 
-// edit product
-
 async function editProduct(id, product) {
   return Product.findByIdAndUpdate(id, product, { returnDocument: "after" });
 }
 
-// delete product
-
-function deleteProduct(id) {
+async function deleteProduct(id) {
   return Product.deleteOne({ _id: id });
 }
 

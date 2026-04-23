@@ -6,9 +6,15 @@ export const saveProductAsync = (id, newProductData) => (dispatch) => {
 		? request(`/api/products/${id}`, 'PATCH', newProductData)
 		: request('/api/products', 'POST', newProductData);
 
-	return saveRequest.then((updatedProduct) => {
-		dispatch(setProductData(updatedProduct.data));
+	return saveRequest.then(({ error, data }) => {
+		if (error) {
+			return { error };
+		}
 
-		return updatedProduct.data;
+		if (data) {
+			dispatch(setProductData(data));
+		}
+
+		return { error: null, data };
 	});
 };

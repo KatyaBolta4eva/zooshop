@@ -25,16 +25,16 @@ const ProductContentContainer = ({
 
 	const isBuyer = ROLE.BUYER;
 
-	const handleAddToCart = async () => {
-		try {
-			await dispatch(
-				addToCartAsync(id),
-			);
+	const handleAddToCart = () => {
+		dispatch(addToCartAsync(id))
+		  .then(({error}) => {
+			if (error) {
+			  dispatch(showToast(error, 'error'));
+			  return;
+			}
 			dispatch(showToast(`${name} добавлен в корзину!`, 'success'));
-		} catch (error) {
-			dispatch(showToast('Ошибка при добавлении в корзину', 'error'));
-		}
-	};
+		  });
+	  };
 
 	return (
 		<div className={className}>

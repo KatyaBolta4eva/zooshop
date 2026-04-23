@@ -1,15 +1,12 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { hideToast } from '../../actions';
-import { Button } from '../button/button';
 import { selectToast } from '../../selectors';
 import styled from 'styled-components';
 
 const ToastContainer = ({ className }) => {
 	const dispatch = useDispatch();
 	const { isVisible, message, type } = useSelector(selectToast);
-
-	const onClick = () => dispatch(hideToast());
 
 	useEffect(() => {
 		if (isVisible) {
@@ -26,14 +23,6 @@ const ToastContainer = ({ className }) => {
 		<div className={`${className} ${type}`}>
 			<div className="toast-content">
 				<span>{message}</span>
-				<Button
-					backgroundcolor="transparent"
-					width="none"
-					border="none"
-					onClick={onClick}
-				>
-					×
-				</Button>
 			</div>
 		</div>
 	);

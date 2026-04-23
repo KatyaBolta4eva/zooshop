@@ -10,7 +10,6 @@ import styled from 'styled-components';
 const SpecialPanelContaier = ({
 	className,
 	id,
-	price,
 	editButton,
 	shouldUpdateProductsList,
 	setShouldUpdateProductsList,
@@ -42,7 +41,7 @@ const SpecialPanelContaier = ({
 			{isAdmin && (
 				<div className="buttons">
 					{editButton}
-					{price && (
+					{id && (
 						<Icon
 							id="fa-trash-o"
 							size="30px"

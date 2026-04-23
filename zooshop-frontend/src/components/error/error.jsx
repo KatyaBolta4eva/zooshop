@@ -12,6 +12,6 @@ export const Error = ({ error }) =>
 	error && (
 		<Div>
 			<H2>Ошибка</H2>
-			<div>{error}</div>
+			<div>{typeof error === 'object' ? error.message : error}</div>
 		</Div>
 	);

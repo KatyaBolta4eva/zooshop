@@ -29,7 +29,7 @@ const ProductContainer = ({ className }) => {
 		}
 
 		dispatch(loadProductAsync(params.id))
-			.then((productData) => setError(productData.error))
+			.then(({error}) => setError(error))
 			.finally(() => {
 				setIsLoading(false);
 			});

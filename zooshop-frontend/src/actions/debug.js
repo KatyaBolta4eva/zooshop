@@ -201,7 +201,6 @@
 //     }
 // `;
 
-
 // 2 вариант стилизации
 
 // export const Pagination = styled(PaginationContainer)`
@@ -269,7 +268,6 @@
 // 	};
 //   }
 
-
 // oформить ошибки
 
 // if (error) {
@@ -278,3 +276,85 @@
 
 // 	 dispatch(setCartItems(data));
 // 	 return { error: null };
+
+
+
+
+
+
+// Текущий вариант (.then/.catch)
+// const handleCheckout = () => {
+// 	setIsOperating(true);
+// 	dispatch(checkoutAsync())
+// 	  .then(() => navigate('/order-confirmation'))
+// 	  .catch((error) => dispatch(showToast(error.message, 'error')))
+// 	  .finally(() => setIsOperating(false));
+//   };
+
+  // Альтернатива (async/await + try/catch)
+//   const handleCheckout = async () => {
+// 	setIsOperating(true);
+// 	try {
+// 	  await dispatch(checkoutAsync());
+// 	  navigate('/order-confirmation');
+// 	} catch (error) {
+// 	  dispatch(showToast(error.message, 'error'));
+// 	} finally {
+// 	  setIsOperating(false);
+// 	}
+//   };
+
+
+
+  // Уменьшаем quantity товара на складе
+  // for (const item of cart.items) {
+  //   const currentQty = Number(item.product_id.quantity) || 0;
+  //   const orderedQty = item.quantity;
+
+  //   await Product.findByIdAndUpdate(item.product_id._id, {
+  //     quantity: currentQty - orderedQty,
+  //   });
+  // }
+
+
+
+// обработка ошибки
+
+//   export const checkoutAsync = () => (dispatch) =>
+// 	request('/api/orders', 'POST').then(({ error }) => {
+// 		if (error) {
+// 			throw new Error(error);
+// 		}
+// 		dispatch(setCartItems([]));
+// 	});
+
+
+// const handleCheckout = () => {
+// 	setIsOperating(true);
+// 	dispatch(checkoutAsync())
+// 	  .then(() => navigate('/order-confirmation'))
+// 	  .catch((error) => {
+// 		dispatch(showToast(error.message, 'error'));
+// 	  })
+// 	  .finally(() => setIsOperating(false));
+//   };
+
+
+
+// function findCartItem(cart, productId) {
+//   return cart.items.find((item) => {
+//     const itemProductId = item.product_id._id
+//       ? item.product_id._id.toString()
+//       : item.product_id.toString();
+//     return itemProductId === productId;
+//   });
+// }
+
+// function filterOutProduct(cart, productId) {
+//   return cart.items.filter((item) => {
+//     const itemProductId = item.product_id._id
+//       ? item.product_id._id.toString()
+//       : item.product_id.toString();
+//     return itemProductId !== productId;
+//   });
+// }

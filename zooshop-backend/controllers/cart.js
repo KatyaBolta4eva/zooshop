@@ -1,6 +1,25 @@
 const Cart = require("../models/Cart");
 
-// get user cart
+async function getCartWithPopulate(cartId) {
+  const cart = await Cart.findById(cartId).populate("items.product_id");
+  if (!cart) return null;
+
+  return cart;
+}
+
+function getProductId(item) {
+  return item.product_id._id
+    ? item.product_id._id.toString()
+    : item.product_id.toString();
+}
+
+function findCartItem(cart, productId) {
+  return cart.items.find((item) => getProductId(item) === productId);
+}
+
+function filterOutProduct(cart, productId) {
+  return cart.items.filter((item) => getProductId(item) !== productId) || [];
+}
 
 async function getCart(userId) {
   let cart = await Cart.findOne({ user_id: userId }).populate(
@@ -9,24 +28,15 @@ async function getCart(userId) {
 
   if (!cart) {
     cart = await Cart.create({ user_id: userId, items: [] });
-    cart = await Cart.findById(cart._id).populate("items.product_id");
   }
 
   return cart;
 }
 
-// add item to cart
-
 async function addItemToCart(userId, productId, quantity = 1) {
-  let cart = await Cart.findOne({ user_id: userId });
+  const cart = await getCart(userId);
 
-  if (!cart) {
-    cart = await Cart.create({ user_id: userId, items: [] });
-  }
-
-  const existingItem = cart.items.find(
-    (item) => item.product_id.toString() === productId// toString?
-  );
+  const existingItem = findCartItem(cart, productId);
 
   if (existingItem) {
     existingItem.quantity += quantity;
@@ -35,62 +45,38 @@ async function addItemToCart(userId, productId, quantity = 1) {
   }
 
   await cart.save();
-
-  return Cart.findById(cart._id).populate("items.product_id");
+  return getCartWithPopulate(cart._id);
 }
-
-// update item quantity in cart
 
 async function updateItemQuantity(userId, productId, quantity) {
   const cart = await Cart.findOne({ user_id: userId });
 
-  if (!cart) return null;
-
-  const item = cart.items.find(
-    (item) => item.product_id.toString() === productId
-  );
-
+  const item = findCartItem(cart, productId);
   if (!item) return null;
 
   if (quantity <= 0) {
-    cart.items = cart.items.filter(
-      (item) => item.product_id.toString() !== productId
-    );
+    cart.items = filterOutProduct(cart, productId);
   } else {
     item.quantity = quantity;
   }
 
   await cart.save();
-
-  return Cart.findById(cart._id).populate("items.product_id");
+  return getCartWithPopulate(cart._id);
 }
-
-// remove item from cart
 
 async function removeItemFromCart(userId, productId) {
   const cart = await Cart.findOne({ user_id: userId });
 
-  if (!cart) return null;
-
-  cart.items = cart.items.filter(
-    (item) => item.product_id.toString() !== productId
-  );
-
+  cart.items = filterOutProduct(cart, productId);
   await cart.save();
-
-  return Cart.findById(cart._id).populate("items.product_id");
+  return getCartWithPopulate(cart._id);
 }
 
-// clear cart
-
 async function clearCart(userId) {
-  let cart = await Cart.findOne({ user_id: userId });
-
-  if (!cart) return { items: [] };
+  const cart = await Cart.findOne({ user_id: userId });
 
   cart.items = [];
   await cart.save();
-
   return { items: [] };
 }
 
