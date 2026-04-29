@@ -4,7 +4,7 @@ import styled from 'styled-components';
 const Discription = styled.div`
 	font-style: italic;
 	margin-top: 20px;
-	color: #8B4513;
+	color: #8b4513;
 `;
 
 const HeaderContainer = ({ className }) => (

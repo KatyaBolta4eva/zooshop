@@ -4,7 +4,6 @@ import { selectUserRole } from '../../selectors';
 import { checkAccess } from '../../utils';
 import { ERROR } from '../../constants';
 
-
 export const PrivateContent = ({ children, access, serverError = null }) => {
 	const userRole = useSelector(selectUserRole);
 

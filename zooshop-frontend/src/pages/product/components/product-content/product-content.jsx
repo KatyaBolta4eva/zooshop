@@ -7,34 +7,33 @@ import styled from 'styled-components';
 
 const ProductContentContainer = ({
 	className,
-	product: {
-		id,
-		name,
-		category,
-		imageUrl,
-		feedType,
-		dietType,
-		price,
-		weightKg,
-		description,
-	},
+	product: { id, name, imageUrl, dietType, price, weightKg, quantity, description },
 }) => {
 	const userRole = useSelector(selectUserRole);
 
 	const dispatch = useDispatch();
 
-	const isBuyer = ROLE.BUYER;
+	const isAdmin = ROLE.ADMIN;
+	const isGUEST = ROLE.GUEST;
 
 	const handleAddToCart = () => {
-		dispatch(addToCartAsync(id))
-		  .then(({error}) => {
+		if (userRole === isGUEST) {
+			dispatch(
+				showToast(
+					'Только зарегистрированные пользователи могут добавлять товары в корзину',
+					'error',
+				),
+			);
+			return;
+		}
+		dispatch(addToCartAsync(id)).then(({ error }) => {
 			if (error) {
-			  dispatch(showToast(error, 'error'));
-			  return;
+				dispatch(showToast(error, 'error'));
+				return;
 			}
 			dispatch(showToast(`${name} добавлен в корзину!`, 'success'));
-		  });
-	  };
+		});
+	};
 
 	return (
 		<div className={className}>
@@ -46,7 +45,7 @@ const ProductContentContainer = ({
 				</div>
 				<div className="product-text">{description}</div>
 
-				{userRole === isBuyer && (
+				{userRole !== isAdmin && (
 					<Button
 						width="280px"
 						fontWeight="bold"
@@ -60,6 +59,13 @@ const ProductContentContainer = ({
 				<div className="product-badge"> Вес: {weightKg} кг</div>
 				<div className="product-price product-badge">{price} ₽</div>
 				<div className="product-badge">{dietType}</div>
+
+				{userRole === isAdmin && (
+					<div className="product-quantity">
+						{' '}
+						Остаток на складе: {quantity} шт
+					</div>
+				)}
 			</div>
 		</div>
 	);
@@ -105,5 +111,29 @@ export const ProductContent = styled(ProductContentContainer)`
 
 	& .product-price {
 		margin: 20px 20px;
+	}
+
+	& .product-quantity {
+		display: inline-flex;
+		align-items: center;
+		background: #ffe5e5;
+		color: #5d4037;
+		padding: 8px 15px;
+		border-radius: 20px;
+		font-size: 14px;
+		font-weight: bold;
+		border: 1px solid #ffd1dc;
+		margin-left: 20px;
+	}
+
+	& button {
+		transition: all 0.3s ease;
+		border: 1px solid transparent;
+	}
+
+	& button:hover {
+		border: 2px solid #e8c4c4;
+		transform: translateY(-2px);
+		box-shadow: 0 4px 12px rgba(232, 196, 196, 0.25);
 	}
 `;

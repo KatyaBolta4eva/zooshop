@@ -37,6 +37,7 @@ const MainContainer = ({ className }) => {
 
 	const onSearch = ({ target }) => {
 		setSearchPhrase(target.value);
+		setPage(1);
 		startDelayedSearch(!shouldSearch);
 	};
 

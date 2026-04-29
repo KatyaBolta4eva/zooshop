@@ -1,4 +1,4 @@
-import {Button} from '../button/button';
+import { Button } from '../button/button';
 import styled from 'styled-components';
 
 export const FilterButton = styled(Button)`
@@ -21,5 +21,3 @@ export const FilterButton = styled(Button)`
 		border-color: #ffc0cb;
 	}
 `;
-
-

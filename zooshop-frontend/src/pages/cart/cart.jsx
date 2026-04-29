@@ -32,7 +32,7 @@ const CartContainer = ({ className }) => {
 		if (userId) {
 			setIsLoading(true);
 			dispatch(loadCartAsync())
-				.then(({error}) => {
+				.then(({ error }) => {
 					if (error) {
 						setError(error);
 					}
@@ -48,7 +48,7 @@ const CartContainer = ({ className }) => {
 	const handleRemoveFromCart = (productId) => {
 		setIsOperating(true);
 		dispatch(removeFromCartAsync(productId))
-			.then(({error}) => {
+			.then(({ error }) => {
 				if (error) {
 					dispatch(showToast(error, 'error'));
 				}
@@ -64,7 +64,7 @@ const CartContainer = ({ className }) => {
 				: updateCartItemQuantityAsync(productId, newQuantity);
 
 		dispatch(action)
-			.then(({error}) => {
+			.then(({ error }) => {
 				if (error) {
 					dispatch(showToast(error, 'error'));
 				}
@@ -79,7 +79,7 @@ const CartContainer = ({ className }) => {
 				onConfirm: () => {
 					setIsOperating(true);
 					dispatch(clearCartAsync())
-						.then(({error}) => {
+						.then(({ error }) => {
 							if (error) {
 								dispatch(showToast(error, 'error'));
 							}
@@ -97,7 +97,7 @@ const CartContainer = ({ className }) => {
 	const handleCheckout = () => {
 		setIsOperating(true);
 		dispatch(checkoutAsync())
-			.then(({error}) => {
+			.then(({ error }) => {
 				if (error) {
 					dispatch(showToast(error, 'error'));
 					return;
@@ -194,5 +194,16 @@ export const Cart = styled(CartContainer)`
 		display: flex;
 		flex-direction: column;
 		gap: 10px;
+	}
+
+	& button {
+		transition: all 0.3s ease;
+		border: 1px solid transparent;
+	}
+
+	& button:hover {
+		border: 2px solid #e8c4a5;
+		transform: translateY(-2px);
+		box-shadow: 0 4px 12px rgba(232, 196, 165, 0.25);
 	}
 `;

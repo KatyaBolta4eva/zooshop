@@ -18,22 +18,22 @@ const CartItemContainer = ({
 
 	return (
 		<div className={className}>
-			{imageUrl && (
-				<img src={imageUrl} alt={name} className="item-image" />
-			)}
+			{imageUrl && <img src={imageUrl} alt={name} className="item-image" />}
 
 			<div className="item-info">
 				<div className="item-name">{name}</div>
 				<div className="item-details">Цена: {price} руб.</div>
 			</div>
 			<div className="quantity-controls">
-				<Button onClick={decreaseQuantity} disabled={disabled}>-</Button>
+				<Button onClick={decreaseQuantity} disabled={disabled}>
+					-
+				</Button>
 				<span>{quantity}</span>
-				<Button onClick={increaseQuantity} disabled={disabled}>+</Button>
+				<Button onClick={increaseQuantity} disabled={disabled}>
+					+
+				</Button>
 			</div>
-			<div className="item-total">
-				Итого: {(price * quantity).toFixed(2)} руб.
-			</div>
+			<div className="item-total">Итого: {(price * quantity).toFixed(2)} руб.</div>
 			<Icon
 				id="fa-trash-o"
 				size="25px"
@@ -93,7 +93,6 @@ export const CartItem = styled(CartItemContainer)`
 			justify-content: center;
 			flex-shrink: 0;
 			font-size: 16px;
-
 
 			&:hover {
 				background-color: #e9e9e9;

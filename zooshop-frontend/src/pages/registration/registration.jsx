@@ -4,7 +4,7 @@ import { Navigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import {request} from '../../utils'
+import { request } from '../../utils';
 import { Button, H2, Input, AuthFormError } from '../../components';
 import { useResetForm } from '../../hooks';
 import { setUser } from '../../actions';
@@ -71,7 +71,7 @@ const RegistrationContainer = ({ className }) => {
 	const formError =
 		errors?.login?.message || errors?.password?.message || errors?.passcheck?.message;
 
-		const errorMessage = formError || serverError;
+	const errorMessage = formError || serverError;
 
 	if (roleId !== ROLE.GUEST) {
 		return <Navigate to="/" />;

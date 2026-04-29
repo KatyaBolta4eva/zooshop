@@ -58,7 +58,7 @@ export const Footer = styled(FooterContainer)`
 	box-shadow: 0px -5px 20px rgba(255, 140, 0, 0.15);
 
 	& > div {
-		color: #8B4513;
+		color: #8b4513;
 		font-size: 14px;
-	  }
+	}
 `;

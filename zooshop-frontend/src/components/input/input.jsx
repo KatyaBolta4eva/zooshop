@@ -11,7 +11,7 @@ export const Input = styled(InputContainer)`
 	margin: 0 0 10px;
 	padding: 10px;
 	font-size: 18px;
-	border: 1px solid #DED8C5;
+	border: 1px solid #ded8c5;
 	border-radius: 20px;
 	background-color: rgba(255, 255, 255, 0.3);
 	&:focus {

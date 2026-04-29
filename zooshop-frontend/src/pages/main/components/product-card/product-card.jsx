@@ -81,7 +81,7 @@ export const ProductCard = styled(ProductCardContainer)`
 	}
 
 	& .price {
-		color: #5D4037;
+		color: #5d4037;
 		font-size: 20px;
 	}
 

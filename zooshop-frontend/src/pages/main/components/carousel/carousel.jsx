@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 
-import image1 from '../../../../assets/images-carousel/cats.jpg'
+import image1 from '../../../../assets/images-carousel/cats.jpg';
 import image2 from '../../../../assets/images-carousel/pudeli.jpg';
 import image3 from '../../../../assets/images-carousel/pes.jpg';
 

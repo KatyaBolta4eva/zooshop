@@ -9,7 +9,7 @@ import {
 	AdminPanel,
 	Main,
 	Cart,
-	OrderConfirmationPage
+	OrderConfirmationPage,
 } from './pages';
 import { setUser } from './actions';
 import { ERROR } from './constants';
@@ -62,13 +62,16 @@ export const Zooshop = () => {
 					<Route path="/product" element={<Product />} />
 					<Route path="/product/:id" element={<Product />} />
 					<Route path="/product/:id/edit" element={<Product />} />
-					<Route path="/order-confirmation" element={<OrderConfirmationPage/>}/>
+					<Route
+						path="/order-confirmation"
+						element={<OrderConfirmationPage />}
+					/>
 					<Route path="*" element={<Error error={ERROR.PAGE_NOT_EXIST} />} />
 				</Routes>
 			</Page>
 			<Footer />
 			<Modal />
-			<Toast/>
+			<Toast />
 		</AppLayout>
 	);
 };

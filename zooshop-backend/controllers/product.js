@@ -8,6 +8,9 @@ async function getProducts(
   dietType = "all",
   sort = "default"
 ) {
+  // const pageNum = Number(page);
+  // const limitNum = Number(limit);
+
   const filter = {
     name: { $regex: search, $options: "i" },
   };
@@ -20,7 +23,7 @@ async function getProducts(
     filter.diet_type = dietType;
   }
 
-  let sortOption = { createdAt: -1 };
+  let sortOption = { _id: 1 };
 
   if (sort === "price-low-high") {
     sortOption = { price: 1 };

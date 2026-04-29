@@ -89,11 +89,15 @@ const AdminPanelContainer = ({ className }) => {
 								/>
 								<div className="product-details">
 									<H3>{product.name}</H3>
-									<P>{product.category}</P>
-									<P fontWeight="bold" color="#5D4037">
-										{product.price} ₽
+									<P fontWeight="bold" color="#A88B8B">
+										Категория: {product.category}
 									</P>
-									<P>Количество на складе: {product.quantity} шт.</P>
+									<P fontWeight="bold" color="#5D4037">
+										Стоимость: {product.price} ₽
+									</P>
+									<P fontWeight="bold" color="#C97B7B">
+										Количество на складе: {product.quantity} шт
+									</P>
 								</div>
 								<SpecialPanel
 									id={product.id}
@@ -175,8 +179,11 @@ export const AdminPanel = styled(AdminPanelContainer)`
 	}
 
 	& i {
+		cursor: pointer;
+		transition: color 0.3s ease;
+
 		&:hover {
-			color: #795548;
+			color: #c97b7b;
 		}
 	}
 `;
