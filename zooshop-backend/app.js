@@ -12,7 +12,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.static("../zooshop-frontend/build"));
 
-app.use("/", routes);
+app.use("/api", routes);
 
 mongoose.connect(process.env.DB_CONNECTION_STRING).then(() => {
   console.log("Connected to mongodb");

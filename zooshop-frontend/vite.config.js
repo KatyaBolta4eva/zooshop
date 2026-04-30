@@ -13,6 +13,9 @@ export default defineConfig(({ mode }) => {
 				},
 			}),
 		],
+		build: {
+			outDir: 'build'
+		  },
 		server: {
 			proxy: {
 				'/api': {
